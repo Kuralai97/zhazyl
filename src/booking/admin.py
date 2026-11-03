@@ -18,6 +18,9 @@ class WorkingHoursAdmin(admin.ModelAdmin):
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
     list_display = ('start', 'client_name', 'client_phone', 'service', 'status', 'source')
+    list_filter = ('status', 'source', 'start')
+    date_hierarchy = 'start'
+    search_fields = ('client_name', 'client_phone')
     actions = ['mark_done', 'mark_no_show']
 
     @admin.action(description='«Өтті» деп белгілеу')
