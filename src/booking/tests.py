@@ -34,3 +34,34 @@ class WorkingHoursTests(TestCase):
     def test_day_off_without_hours_ok(self):
         w = WorkingHours(weekday=6, is_day_off=True)
         w.full_clean()
+
+
+class BookingTests(TestCase):
+    def setUp(self):
+        from datetime import datetime
+        from django.utils import timezone
+        self.svc = Service.objects.create(name='Шаш алу', duration_min=40, price=6000)
+        self.t = timezone.make_aware(datetime(2026, 11, 10, 12, 0))
+
+    def make(self, minutes=0, consent=True):
+        from datetime import timedelta
+        from .models import Booking
+        return Booking(client_name='Дәурен', client_phone='+77000000000', service=self.svc,
+                       start=self.t + timedelta(minutes=minutes), consent=consent)
+
+    def test_overlap_rejected(self):
+        self.make().save()
+        with self.assertRaises(ValidationError):
+            self.make(minutes=20).full_clean()
+
+    def test_next_slot_ok(self):
+        self.make().save()
+        self.make(minutes=40).full_clean()
+
+    def test_consent_required(self):
+        with self.assertRaises(ValidationError):
+            self.make(consent=False).full_clean()
+
+    def test_cancelled_frees_slot(self):
+        b = self.make(); b.status = 'cancelled'; b.save()
+        self.make(minutes=10).full_clean()
