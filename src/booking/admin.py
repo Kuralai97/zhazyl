@@ -18,3 +18,12 @@ class WorkingHoursAdmin(admin.ModelAdmin):
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
     list_display = ('start', 'client_name', 'client_phone', 'service', 'status', 'source')
+    actions = ['mark_done', 'mark_no_show']
+
+    @admin.action(description='«Өтті» деп белгілеу')
+    def mark_done(self, request, queryset):
+        queryset.update(status='done')
+
+    @admin.action(description='«Келмей қалды» деп белгілеу')
+    def mark_no_show(self, request, queryset):
+        queryset.update(status='no_show')
