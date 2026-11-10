@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}«Ұста» барбершопы — онлайн жазылу{% endblock %}</title>
+<style>
+body{font-family:system-ui,sans-serif;max-width:640px;margin:0 auto;padding:16px;color:#1a1a1a;background:#fff}
+h1{font-size:1.4rem}a{color:#0b5394}
+.card{border:1px solid #ccc;border-radius:8px;padding:12px;margin:8px 0;display:block;text-decoration:none;color:inherit}
+.slots{display:flex;flex-wrap:wrap;gap:8px}.slots label{border:1px solid #0b5394;border-radius:6px;padding:8px 12px}
+.days{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.days a{padding:6px 8px;border:1px solid #ccc;border-radius:6px}
+.days a.on{background:#0b5394;color:#fff}
+.err{color:#a00000;font-weight:600}input[type=text],input[type=tel]{width:100%;padding:8px;font-size:1rem;box-sizing:border-box}
+button{padding:10px 16px;font-size:1rem;background:#0b5394;color:#fff;border:0;border-radius:6px}
+</style>
+</head>
+<body>{% block body %}{% endblock %}</body>
+</html>
