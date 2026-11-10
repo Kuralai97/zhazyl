@@ -63,5 +63,7 @@ class BookingTests(TestCase):
             self.make(consent=False).full_clean()
 
     def test_cancelled_frees_slot(self):
-        b = self.make(); b.status = 'cancelled'; b.save()
+        b = self.make()
+        b.status = 'cancelled'
+        b.save()
         self.make(minutes=10).full_clean()
