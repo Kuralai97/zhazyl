@@ -1,0 +1,10 @@
+{% extends 'booking/base.html' %}
+{% block body %}
+<h1>«Ұста» барбершопы — онлайн жазылу</h1>
+<p>Қызметті таңдаңыз:</p>
+{% for s in services %}
+<a class="card" href="{% url 'booking:book' s.pk %}"><strong>{{ s.name }}</strong><br>{{ s.duration_min }} мин · {{ s.price }} ₸</a>
+{% empty %}
+<p>Қызметтер әзірге қосылмаған.</p>
+{% endfor %}
+{% endblock %}

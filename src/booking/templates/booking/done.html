@@ -1,0 +1,7 @@
+{% extends 'booking/base.html' %}
+{% block body %}
+<h1>Сіз жазылдыңыз</h1>
+<p>{{ b.service.name }}, {{ b.start|date:"d.m.Y" }} сағат {{ b.start|time:"H:i" }}.</p>
+<p>Келе алмасаңыз, барбершопқа қоңырау шалыңыз.</p>
+<p><a href="{% url 'booking:index' %}">Басты бетке</a></p>
+{% endblock %}

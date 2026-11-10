@@ -1,0 +1,26 @@
+{% extends 'booking/base.html' %}
+{% block body %}
+<p><a href="{% url 'booking:index' %}">← Қызметтер</a></p>
+<h1>{{ service.name }}</h1>
+<p>{{ service.duration_min }} мин · {{ service.price }} ₸</p>
+<p>Күнді таңдаңыз:</p>
+<div class="days">{% for d in days %}<a href="?kun={{ d.isoformat }}"{% if d == day %} class="on"{% endif %}>{{ d|date:"d.m" }}</a>{% endfor %}</div>
+<form method="post">{% csrf_token %}
+{% for e in form.non_field_errors %}<p class="err">{{ e }}</p>{% endfor %}
+<p>{{ day|date:"d.m.Y" }} күнгі бос уақыт:</p>
+{% if form.start.errors %}<p class="err">{{ form.start.errors.0 }}</p>{% endif %}
+<div class="slots">
+{% for t in slots %}<label><input type="radio" name="start" value="{{ t.isoformat }}"> {{ t|time:"H:i" }}</label>
+{% empty %}<p>Бұл күні бос уақыт жоқ. Басқа күнді таңдаңыз.</p>{% endfor %}
+</div>
+{% if slots %}
+<p><label for="id_client_name">{{ form.client_name.label }}</label>{{ form.client_name }}
+{% for e in form.client_name.errors %}<span class="err">{{ e }}</span>{% endfor %}</p>
+<p><label for="id_client_phone">{{ form.client_phone.label }}</label>{{ form.client_phone }}
+{% for e in form.client_phone.errors %}<span class="err">{{ e }}</span>{% endfor %}</p>
+<p>{{ form.consent }} <label for="id_consent">{{ form.consent.label }}</label>
+{% for e in form.consent.errors %}<br><span class="err">{{ e }}</span>{% endfor %}</p>
+<button type="submit">Жазылу</button>
+{% endif %}
+</form>
+{% endblock %}

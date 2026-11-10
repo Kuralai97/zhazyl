@@ -1,0 +1,1 @@
+# demo_derekter командасы
