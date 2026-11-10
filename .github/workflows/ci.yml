@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Тәуелділіктер
+        run: pip install -r requirements.txt -r requirements-dev.txt
+      - name: Линтер (ruff)
+        run: ruff check .
+      - name: Тесттер және қамту (кемінде 60 %)
+        working-directory: src
+        run: |
+          coverage run --source=booking manage.py test booking
+          coverage report --fail-under=60
