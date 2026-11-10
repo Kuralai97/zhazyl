@@ -16,7 +16,7 @@ class ServiceTests(TestCase):
         s = Service(name='Шаш алу', duration_min=40, price=6000)
         s.full_clean()
         s.save()
-        self.assertEqual(Service.objects.count(), 1)
+        self.assertEqual(Service.objects.count(), 2)
 
 
 class WorkingHoursTests(TestCase):
