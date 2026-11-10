@@ -23,3 +23,7 @@ jobs:
         run: |
           coverage run --source=booking manage.py test booking
           coverage report --fail-under=60
+      - name: Құпияларды іздеу (gitleaks)
+        run: docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.21.2 dir /repo -v
+      - name: Тәуелділіктердің осалдығы (pip-audit, OSV дерекқоры)
+        run: pip-audit -r requirements.txt
