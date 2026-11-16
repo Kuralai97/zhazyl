@@ -14,7 +14,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
 
 MODEL = "qwen2.5:3b"
 OLLAMA = "http://localhost:11434"
-OPTIONS = {"temperature": 0, "seed": 42}
+OPTIONS = {"temperature": 0, "seed": 42, "num_predict": 10, "stop": ["\n"]}
 LABELS = ["жазылу", "ауыстыру", "бас тарту", "сұрақ", "басқа"]
 ROOT = Path(__file__).resolve().parent.parent
 RUNS = ROOT / "evals" / "runs"
@@ -75,7 +75,7 @@ def parse(raw):
 
 def ask(prompt):
     t0 = time.time()
-    r = requests.post(f"{OLLAMA}/api/generate", timeout=300, json={
+    r = requests.post(f"{OLLAMA}/api/generate", timeout=120, json={
         "model": MODEL, "prompt": prompt, "stream": False, "options": OPTIONS})
     r.raise_for_status()
     return r.json()["response"].strip(), time.time() - t0
@@ -129,7 +129,7 @@ if __name__ == "__main__":
     rows = [("AI-сыз ережелер", base), ("Zero-shot", zero), ("Few-shot", few)]
     md = ["# 12-ЗЖ: eval нәтижелері", "",
           f"- Модель: {MODEL} (digest {digest}), Ollama {version}",
-          f"- Параметрлер: temperature={OPTIONS['temperature']}, seed={OPTIONS['seed']}",
+          f"- Параметрлер: {OPTIONS}",
           f"- Іске қосылған уақыты: {started}",
           f"- Мысалдар: {len(DATA)} (оның қиыны {len(hard)})",
           f"- Орташа жауап уақыты: zero-shot {zsec:.1f} с, few-shot {fsec:.1f} с", "",
