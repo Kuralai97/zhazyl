@@ -10,7 +10,18 @@
     <dt>Уақыты</dt><dd>{{ b.start|time:"H:i" }}</dd>
     <dt>Бағасы</dt><dd>{{ b.service.price }} ₸</dd>
   </dl>
-  <p class="lead">Келе алмасаңыз, барбершопқа WhatsApp-пен жазыңыз — уақытыңызды басқа клиентке береміз.</p>
+  <div class="linkbox">
+    <p><strong>Жазылуыңыздың жеке сілтемесі.</strong> Оны сақтап қойыңыз: жоспарыңыз өзгерсе, осы сілтеме арқылы жазылудан бас тарта аласыз.</p>
+    <div class="copyrow"><input id="link" type="text" value="{{ link }}" readonly aria-label="Жеке сілтеме"><button class="chip" type="button" id="copy">Көшіру</button></div>
+    <p class="hint" id="copied" aria-live="polite"></p>
+  </div>
+  <script>
+  document.getElementById('copy').addEventListener('click', function () {
+    var i = document.getElementById('link'), m = document.getElementById('copied');
+    function sel() { i.focus(); i.select(); m.textContent = 'Сілтеме белгіленді — көшіріңіз (Ctrl + C).'; }
+    if (navigator.clipboard) { navigator.clipboard.writeText(i.value).then(function () { m.textContent = 'Көшірілді.'; }, sel); } else { sel(); }
+  });
+  </script>
   <a class="back" href="{% url 'booking:index' %}">← Басты бетке</a>
 </div>
 {% endblock %}

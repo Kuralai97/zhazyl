@@ -146,3 +146,55 @@ class DemoDataTests(TestCase):
         a = list(Booking.objects.values_list('client_phone', flat=True))
         call_command('demo_derekter', seed=7, services=5, bookings=20, stdout=open('/dev/null', 'w'))
         self.assertEqual(a, list(Booking.objects.values_list('client_phone', flat=True)))
+
+
+class CancelAndScheduleTests(TestCase):
+    """Клиенттің жеке сілтемесі арқылы бас тартуы және иесінің кестесі."""
+
+    def setUp(self):
+        from datetime import timedelta
+
+        from django.utils import timezone
+        self.svc = Service.objects.create(name='Шаш алу', duration_min=30, price=5000)
+        self.b = Booking.objects.create(client_name='Тест', client_phone='+77011234567', service=self.svc,
+                                        start=timezone.now() + timedelta(days=1), consent=True)
+
+    def link(self, pk=None):
+        from django.core import signing
+
+        from .views import SALT
+        return f'/zhazylu/basqaru/{signing.dumps(pk or self.b.pk, salt=SALT)}/'
+
+    def test_client_can_cancel_by_link(self):
+        r = self.client.post(self.link())
+        self.assertContains(r, 'Жазылу тоқтатылды')
+        self.b.refresh_from_db()
+        self.assertEqual(self.b.status, 'cancelled')
+
+    def test_forged_link_rejected(self):
+        self.assertEqual(self.client.get(f'/zhazylu/basqaru/{self.b.pk}/').status_code, 404)
+
+    def test_past_booking_cannot_be_cancelled(self):
+        from datetime import timedelta
+
+        from django.utils import timezone
+        self.b.start = timezone.now() - timedelta(hours=1)
+        self.b.save()
+        self.client.post(self.link())
+        self.b.refresh_from_db()
+        self.assertEqual(self.b.status, 'new')
+
+    def test_schedule_requires_login(self):
+        self.assertEqual(self.client.get('/iesi/keste/').status_code, 302)
+
+    def test_owner_sees_day_and_marks_done(self):
+        from django.contrib.auth.models import User
+        User.objects.create_superuser('iesi', 'i@example.com', 'test-pass-123')
+        self.client.login(username='iesi', password='test-pass-123')
+        from django.utils import timezone
+        day = timezone.localtime(self.b.start).date().isoformat()
+        r = self.client.get(f'/iesi/keste/?kun={day}')
+        self.assertContains(r, 'Тест')
+        self.client.post(f'/iesi/keste/?kun={day}', {'id': self.b.pk, 'status': 'done'})
+        self.b.refresh_from_db()
+        self.assertEqual(self.b.status, 'done')
