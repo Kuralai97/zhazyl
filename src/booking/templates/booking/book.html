@@ -2,7 +2,7 @@
 {% block title %}{{ service.name }} — «Ұста» барбершопы{% endblock %}
 {% block body %}
 <a class="back" href="{% url 'booking:index' %}">← Қызметтер</a>
-<ol class="steps"><li class="done">1. Қызмет</li><li class="on">2. Күн мен уақыт</li><li{% if slots %} class="on"{% endif %}>3. Деректер</li></ol>
+<ol class="steps"><li class="done"><i>1</i><a href="{% url 'booking:index' %}">Қызмет</a></li><li class="on"><i>2</i>Күн мен уақыт</li><li{% if slots %} class="on"{% endif %}><i>3</i>Деректер</li></ol>
 <div class="panel svc">
   <div><h1>{{ service.name }}</h1><span class="dur">{{ service.duration_min }} мин</span></div>
   <span class="price">{{ service.price }} ₸</span>
