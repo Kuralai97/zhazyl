@@ -1,7 +1,16 @@
 {% extends 'booking/base.html' %}
+{% block title %}Жазылу расталды — «Ұста» барбершопы{% endblock %}
 {% block body %}
-<h1>Сіз жазылдыңыз</h1>
-<p>{{ b.service.name }}, {{ b.start|date:"d.m.Y" }} сағат {{ b.start|time:"H:i" }}.</p>
-<p>Келе алмасаңыз, барбершопқа қоңырау шалыңыз.</p>
-<p><a href="{% url 'booking:index' %}">Басты бетке</a></p>
+<div class="panel">
+  <div class="ok" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"/></svg></div>
+  <h1>Сіз жазылдыңыз</h1>
+  <dl class="summary">
+    <dt>Қызмет</dt><dd>{{ b.service.name }}</dd>
+    <dt>Күні</dt><dd>{{ b.start|date:"d.m.Y" }}</dd>
+    <dt>Уақыты</dt><dd>{{ b.start|time:"H:i" }}</dd>
+    <dt>Бағасы</dt><dd>{{ b.service.price }} ₸</dd>
+  </dl>
+  <p class="lead">Келе алмасаңыз, барбершопқа WhatsApp-пен жазыңыз — уақытыңызды басқа клиентке береміз.</p>
+  <a class="back" href="{% url 'booking:index' %}">← Басты бетке</a>
+</div>
 {% endblock %}

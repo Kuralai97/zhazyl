@@ -4,16 +4,83 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}«Ұста» барбершопы — онлайн жазылу{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Noto+Sans:wght@400;500;600&display=swap">
 <style>
-body{font-family:system-ui,sans-serif;max-width:640px;margin:0 auto;padding:16px;color:#1a1a1a;background:#fff}
-h1{font-size:1.4rem}a{color:#0b5394}
-.card{border:1px solid #ccc;border-radius:8px;padding:12px;margin:8px 0;display:block;text-decoration:none;color:inherit}
-.slots{display:flex;flex-wrap:wrap;gap:8px}.slots label{border:1px solid #0b5394;border-radius:6px;padding:8px 12px}
-.days{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.days a{padding:6px 8px;border:1px solid #ccc;border-radius:6px}
-.days a.on{background:#0b5394;color:#fff}
-.err{color:#a00000;font-weight:600}input[type=text],input[type=tel]{width:100%;padding:8px;font-size:1rem;box-sizing:border-box}
-button{padding:10px 16px;font-size:1rem;background:#0b5394;color:#fff;border:0;border-radius:6px}
+:root{
+  --ink:#16201d; --muted:#5d6b66; --paper:#f5f2ec; --card:#ffffff; --line:#e3ddd2;
+  --green:#1f3a34; --green-2:#2c5148; --brass:#b8863b; --brass-soft:#f3e7d3;
+  --ok:#2f7a4f; --err:#a3341f; --err-bg:#fbe9e4;
+  --display:"Montserrat",system-ui,sans-serif; --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+a{color:inherit}
+.top{background:var(--green);color:#fff}
+.top-in{max-width:960px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo{width:40px;height:40px;border-radius:50%;background:var(--brass);display:grid;place-items:center}
+.brand b{font-family:var(--display);font-size:1.25rem;letter-spacing:.02em}
+.brand small{display:block;font-size:.75rem;opacity:.75;letter-spacing:.08em;text-transform:uppercase}
+.meta{display:flex;gap:8px;flex-wrap:wrap;font-size:.85rem}
+.meta span{background:rgba(255,255,255,.1);border-radius:999px;padding:4px 12px}
+main{max-width:960px;margin:0 auto;padding:24px 20px 48px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,4vw,2.3rem);line-height:1.15;margin:0 0 8px;text-wrap:balance}
+.lead{color:var(--muted);margin:0 0 24px;max-width:60ch}
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 20px;padding:0;list-style:none;font-size:.85rem}
+.steps li{padding:6px 12px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--muted)}
+.steps li.on{background:var(--green);border-color:var(--green);color:#fff}
+.steps li.done{background:var(--brass-soft);border-color:var(--brass-soft);color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;text-decoration:none;transition:border-color .15s,transform .15s}
+.card:hover{border-color:var(--brass);transform:translateY(-2px)}
+.card strong{display:block;font-family:var(--display);font-size:1.05rem}
+.card .dur{color:var(--muted);font-size:.9rem}
+.price{font-family:var(--display);font-weight:700;color:var(--green-2);white-space:nowrap}
+.go{display:inline-block;margin-top:2px;font-size:.85rem;color:var(--brass);font-weight:600}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px}
+.panel h2{font-family:var(--display);font-size:1.05rem;margin:0 0 12px}
+.svc{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.back{display:inline-block;margin-bottom:14px;color:var(--muted);text-decoration:none;font-size:.9rem}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px}
+.days a{flex:0 0 auto;min-width:64px;text-align:center;text-decoration:none;border:1px solid var(--line);border-radius:12px;padding:8px 6px;background:var(--paper)}
+.days a small{display:block;font-size:.75rem;color:var(--muted)}
+.days a b{font-family:var(--display)}
+.days a.on{background:var(--green);border-color:var(--green);color:#fff}
+.days a.on small{color:#d7e3df}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px}
+.slot{position:relative}
+.slot input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.slot span{display:block;text-align:center;padding:10px 0;border:1.5px solid var(--green-2);border-radius:10px;font-weight:600;color:var(--green-2)}
+.slot input:checked + span{background:var(--green-2);color:#fff}
+.slot input:focus-visible + span{outline:3px solid var(--brass);outline-offset:2px}
+.empty{color:var(--muted);margin:0}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-weight:600;font-size:.95rem}
+.field input{font:inherit;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
+.field input:focus{outline:2px solid var(--brass);border-color:var(--brass)}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;margin-bottom:16px}
+.consent input{margin-top:4px;width:18px;height:18px;accent-color:var(--green)}
+.err{color:var(--err);font-size:.88rem}
+.alert{background:var(--err-bg);color:var(--err);border-radius:10px;padding:10px 14px;font-weight:600;margin-bottom:14px}
+.btn{font:inherit;font-weight:700;font-family:var(--display);background:var(--brass);color:#fff;border:0;border-radius:12px;padding:14px 22px;cursor:pointer;width:100%;max-width:320px}
+.btn:hover{background:#a2752f}
+.ok{width:64px;height:64px;border-radius:50%;background:var(--ok);display:grid;place-items:center;margin-bottom:14px}
+.summary{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:16px 0}
+.summary dt{color:var(--muted)}.summary dd{margin:0;font-weight:600}
+footer{max-width:960px;margin:0 auto;padding:16px 20px 32px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
+@media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
 </style>
 </head>
-<body>{% block body %}{% endblock %}</body>
+<body>
+<header class="top"><div class="top-in">
+  <a class="brand" href="{% url 'booking:index' %}">
+    <span class="logo" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/></svg></span>
+    <span><b>«Ұста»</b><small>барбершоп · Астана</small></span>
+  </a>
+  <div class="meta"><span>Дс–Сб 10:00–20:00</span><span>Жексенбі — демалыс</span></div>
+</div></header>
+<main>{% block body %}{% endblock %}</main>
+<footer>«Ұста» барбершопы · Аты мен телефоныңыз тек жазылу үшін қолданылады.</footer>
+</body>
 </html>
