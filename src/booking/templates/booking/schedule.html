@@ -1,0 +1,39 @@
+{% extends 'booking/base.html' %}
+{% block title %}Күндік кесте — «Ұста»{% endblock %}
+{% block body %}
+<div class="schedhead">
+  <div><p class="eyebrow">Иесінің кестесі</p><h1>{{ wd }}, {{ day|date:"d.m.Y" }}{% if day == today %} · бүгін{% endif %}</h1></div>
+  <nav class="daynav" aria-label="Күн ауыстыру">
+    <a class="chip" href="?kun={{ prev.isoformat }}">← Алдыңғы күн</a>
+    {% if day != today %}<a class="chip" href="?">Бүгін</a>{% endif %}
+    <a class="chip" href="?kun={{ next.isoformat }}">Келесі күн →</a>
+  </nav>
+</div>
+<div class="stats">
+  <div class="stat"><b>{{ count }}</b><span>жазылу</span></div>
+  <div class="stat"><b>{{ revenue }} ₸</b><span>күтілетін түсім</span></div>
+  <div class="stat"><b>{{ done }}</b><span>өтті</span></div>
+  <div class="stat"><b>{{ no_show }}</b><span>келмеді</span></div>
+  <div class="stat"><b>{{ cancelled }}</b><span>бас тартты</span></div>
+</div>
+<div class="panel">
+  {% for b in items %}
+  <div class="row st-{{ b.status }}">
+    <div class="time"><b>{{ b.start|time:"H:i" }}</b><span>{{ b.end|time:"H:i" }}</span></div>
+    <div class="who"><strong>{{ b.client_name }}</strong><span>{{ b.service.name }} · {{ b.client_phone }}{% if b.source == 'online' %} · онлайн{% endif %}</span></div>
+    <div class="act">
+      <span class="badge">{{ b.get_status_display }}</span>
+      {% if b.status == 'new' %}
+      <form method="post">{% csrf_token %}<input type="hidden" name="id" value="{{ b.pk }}">
+        <button class="chip" name="status" value="done">Өтті</button>
+        <button class="chip" name="status" value="no_show">Келмеді</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+  {% empty %}
+  <p class="empty">Бұл күні жазылу жоқ.</p>
+  {% endfor %}
+</div>
+<p><a class="back" href="/admin/">Әкімші панеліне өту →</a></p>
+{% endblock %}

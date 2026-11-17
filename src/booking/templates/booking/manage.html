@@ -1,0 +1,27 @@
+{% extends 'booking/base.html' %}
+{% block title %}Менің жазылуым — «Ұста» барбершопы{% endblock %}
+{% block body %}
+<div class="panel">
+  {% if b.status == 'cancelled' %}
+  <h1>Жазылу тоқтатылды</h1>
+  <p class="lead">Бұл уақыт енді басқа клиенттерге бос. Қайта жазылғыңыз келсе, басты бетке өтіңіз.</p>
+  {% else %}
+  <h1>Менің жазылуым</h1>
+  {% endif %}
+  <dl class="summary">
+    <dt>Қызмет</dt><dd>{{ b.service.name }}</dd>
+    <dt>Күні</dt><dd>{{ b.start|date:"d.m.Y" }}</dd>
+    <dt>Уақыты</dt><dd>{{ b.start|time:"H:i" }}</dd>
+    <dt>Күйі</dt><dd>{{ b.get_status_display }}</dd>
+  </dl>
+  {% if can_cancel %}
+  <form method="post">{% csrf_token %}
+    <p class="lead">Келе алмасаңыз, жазылудан бас тартыңыз — уақытыңыз басқа клиентке берілсін.</p>
+    <button class="btn btn-ghost" type="submit">Жазылудан бас тарту</button>
+  </form>
+  {% elif b.status != 'cancelled' %}
+  <p class="lead">Бұл жазылудан енді бас тарту мүмкін емес: уақыты өтіп кеткен немесе ол аяқталған.</p>
+  {% endif %}
+  <p><a class="back" href="{% url 'booking:index' %}">← Басты бетке</a></p>
+</div>
+{% endblock %}

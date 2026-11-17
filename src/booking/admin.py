@@ -2,6 +2,11 @@ from django.contrib import admin
 
 from .models import Booking, Service, WorkingHours
 
+admin.site.site_header = '«Ұста» — әкімші панелі'
+admin.site.site_title = '«Ұста»'
+admin.site.index_title = 'Басқару'
+admin.site.site_url = '/iesi/keste/'
+
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
