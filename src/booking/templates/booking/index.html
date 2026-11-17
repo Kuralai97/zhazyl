@@ -5,7 +5,10 @@
 <p class="lead">Қызметті таңдаңыз, шебердің бос уақытын көріп, бір минутта жазылыңыз.</p>
 {% if services %}
 <div class="tools">
-  <input type="search" id="q" placeholder="Қызметті іздеу, мысалы: сақал" aria-label="Қызметті іздеу">
+  <select id="q" aria-label="Қызметті таңдау">
+    <option value="">Барлық қызметтер</option>
+    {% for s in services %}<option value="{{ s.pk }}">{{ s.name }} — {{ s.price }} ₸</option>{% endfor %}
+  </select>
   <button class="chip" type="button" data-dur="" aria-pressed="true">Барлығы</button>
   <button class="chip" type="button" data-dur="30" aria-pressed="false">30 мин</button>
   <button class="chip" type="button" data-dur="60" aria-pressed="false">60 мин</button>
@@ -13,7 +16,7 @@
 {% endif %}
 <div class="grid" id="services">
 {% for s in services %}
-<a class="card" href="{% url 'booking:book' s.pk %}" data-name="{{ s.name|lower }}" data-dur="{{ s.duration_min }}">
+<a class="card" href="{% url 'booking:book' s.pk %}" data-id="{{ s.pk }}" data-dur="{{ s.duration_min }}">
   <span><strong>{{ s.name }}</strong><span class="dur">{{ s.duration_min }} мин</span><br><span class="go">Уақыт таңдау →</span></span>
   <span class="price">{{ s.price }} ₸</span>
 </a>
@@ -21,20 +24,20 @@
 <div class="panel"><p class="empty">Қызметтер әзірге қосылмаған.</p></div>
 {% endfor %}
 </div>
-<p class="empty" id="none" hidden>Мұндай қызмет табылмады. Іздеуді өзгертіңіз.</p>
+<p class="empty" id="none" hidden>Бұл сүзгіге сай қызмет жоқ. Басқа ұзақтықты не «Барлық қызметтер» таңдаңыз.</p>
 <script>
 (function () {
   var q = document.getElementById('q'); if (!q) return;
   var chips = document.querySelectorAll('.chip'), dur = '';
   function apply() {
-    var text = q.value.trim().toLowerCase(), shown = 0;
+    var id = q.value, shown = 0;
     document.querySelectorAll('#services .card').forEach(function (c) {
-      var ok = c.dataset.name.indexOf(text) !== -1 && (!dur || c.dataset.dur === dur);
+      var ok = (!id || c.dataset.id === id) && (!dur || c.dataset.dur === dur);
       c.hidden = !ok; if (ok) shown++;
     });
     document.getElementById('none').hidden = shown > 0;
   }
-  q.addEventListener('input', apply);
+  q.addEventListener('change', apply);
   chips.forEach(function (b) {
     b.addEventListener('click', function () {
       dur = b.dataset.dur;
