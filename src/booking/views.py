@@ -10,6 +10,8 @@ from .forms import BookingForm
 from .models import Booking, Service
 from .slots import free_slots
 
+WEEKDAYS = ['Дс', 'Сс', 'Ср', 'Бс', 'Жм', 'Сб', 'Жс']
+
 
 def index(request):
     """ZHL-20: қызметтер тізімі бағасымен."""
@@ -40,7 +42,7 @@ def book(request, service_id):
             request.session['last_booking'] = b.pk
             return redirect('booking:done')
         day = timezone.localtime(form.cleaned_data['start']).date()
-    days = [today + timedelta(days=i) for i in range(14)]
+    days = [{'d': today + timedelta(days=i), 'wd': WEEKDAYS[(today + timedelta(days=i)).weekday()]} for i in range(14)]
     return render(request, 'booking/book.html', {
         'service': service, 'day': day, 'days': days, 'slots': free_slots(service, day), 'form': form,
     })
