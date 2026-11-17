@@ -14,6 +14,7 @@
   --display:"Montserrat",system-ui,sans-serif; --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
 a{color:inherit}
 .top{background:var(--green);color:#fff}
@@ -22,15 +23,22 @@ a{color:inherit}
 .logo{width:40px;height:40px;border-radius:50%;background:var(--brass);display:grid;place-items:center}
 .brand b{font-family:var(--display);font-size:1.25rem;letter-spacing:.02em}
 .brand small{display:block;font-size:.75rem;opacity:.75;letter-spacing:.08em;text-transform:uppercase}
-.meta{display:flex;gap:8px;flex-wrap:wrap;font-size:.85rem}
-.meta span{background:rgba(255,255,255,.1);border-radius:999px;padding:4px 12px}
+.meta{font-size:.85rem;opacity:.85}
 main{max-width:960px;margin:0 auto;padding:24px 20px 48px}
 h1{font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,4vw,2.3rem);line-height:1.15;margin:0 0 8px;text-wrap:balance}
 .lead{color:var(--muted);margin:0 0 24px;max-width:60ch}
-.steps{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 20px;padding:0;list-style:none;font-size:.85rem}
-.steps li{padding:6px 12px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--muted)}
-.steps li.on{background:var(--green);border-color:var(--green);color:#fff}
-.steps li.done{background:var(--brass-soft);border-color:var(--brass-soft);color:var(--ink)}
+.steps{display:flex;gap:18px;flex-wrap:wrap;margin:0 0 18px;padding:0;list-style:none;font-size:.85rem;color:var(--muted)}
+.steps li{display:flex;align-items:center;gap:6px}
+.steps li i{font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--line);font-size:.75rem;font-weight:700}
+.steps li.on{color:var(--ink);font-weight:600}.steps li.on i{background:var(--green);border-color:var(--green);color:#fff}
+.steps li.done i{background:var(--brass-soft);border-color:var(--brass-soft);color:var(--ink)}
+.steps a{text-decoration:underline;text-underline-offset:3px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 16px}
+.tools input{font:inherit;flex:1 1 240px;min-width:0;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.tools input:focus{outline:2px solid var(--brass);border-color:var(--brass)}
+.chip{font:inherit;font-size:.9rem;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+.chip:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
 .card{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;text-decoration:none;transition:border-color .15s,transform .15s}
 .card:hover{border-color:var(--brass);transform:translateY(-2px)}
@@ -78,7 +86,7 @@ footer{max-width:960px;margin:0 auto;padding:16px 20px 32px;color:var(--muted);f
     <span class="logo" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/></svg></span>
     <span><b>«Ұста»</b><small>барбершоп · Астана</small></span>
   </a>
-  <div class="meta"><span>Дс–Сб 10:00–20:00</span><span>Жексенбі — демалыс</span></div>
+  <p class="meta">Дс–Сб 10:00–20:00 · Жексенбі — демалыс</p>
 </div></header>
 <main>{% block body %}{% endblock %}</main>
 <footer>«Ұста» барбершопы · Аты мен телефоныңыз тек жазылу үшін қолданылады.</footer>
